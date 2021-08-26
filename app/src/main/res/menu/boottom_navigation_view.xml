@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/characterFragment"
+        android:orderInCategory="1"
+        android:title="CHARACTER"
+        android:icon="@drawable/ic_baseline_supervised_user_circle_24"/>
+
+    <item
+        android:id="@+id/episodeFragment"
+        android:orderInCategory="2"
+        android:title="Episods"
+        android:icon="@drawable/ic_baseline_perm_contact_calendar_24"/>
+
+    <item
+        android:id="@+id/locationsFragment"
+        android:orderInCategory="3"
+        android:title="LOCATIONS"
+        android:icon="@drawable/ic_baseline_live_tv_24"/>
+
+
+</menu>

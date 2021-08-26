@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragments.character.detail.CharacterDetailFragment">
+
+    <ImageView
+        android:id="@+id/image_character_detail"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="@dimen/size20"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        tools:ignore="ContentDescription"
+        tools:src="@tools:sample/avatars"/>
+    <TextView
+        android:id="@+id/txt_name_character_detail"
+        app:layout_constraintTop_toTopOf="@id/image_character_detail"
+        app:layout_constraintStart_toEndOf="@id/image_character_detail"
+        android:layout_margin="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size20"
+        tools:text="@tools:sample/lorem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/txt_status_character_detail"
+        app:layout_constraintStart_toStartOf="@id/image_character_detail"
+        app:layout_constraintTop_toBottomOf="@id/image_character_detail"
+        android:layout_marginStart="@dimen/size20"
+        android:textStyle="bold"
+        android:layout_margin="10dp"
+        android:textColor="@color/purple_700"
+        android:textSize="@dimen/size20"
+        android:text="@string/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/txt_status_detail"
+        app:layout_constraintStart_toEndOf="@id/txt_status_character_detail"
+        app:layout_constraintTop_toBottomOf="@id/image_character_detail"
+        android:layout_marginStart="@dimen/size20"
+        android:textStyle="bold"
+        android:layout_margin="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size20"
+        tools:text="@tools:sample/lorem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+<!--    <TextView-->
+<!--        android:id="@+id/txt_species_character_detail"-->
+<!--        app:layout_constraintStart_toStartOf="@id/txt_status_character_detail"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/txt_status_character_detail"-->
+<!--        android:layout_marginStart="@dimen/size20"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="@dimen/size20"-->
+<!--        tools:text="@tools:sample/lorem"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"/>-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/txt_gender_character_detail"-->
+<!--        app:layout_constraintStart_toStartOf="@id/txt_species_character_detail"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/txt_species_character_detail"-->
+<!--        android:layout_marginStart="@dimen/size20"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="@dimen/size20"-->
+<!--        tools:text="@tools:sample/lorem"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"/>-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/txt_created_character_detail"-->
+<!--        app:layout_constraintStart_toStartOf="@id/txt_gender_character_detail"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/txt_gender_character_detail"-->
+<!--        android:layout_marginStart="@dimen/size20"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="@dimen/size20"-->
+<!--        tools:text="@tools:sample/lorem"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"/>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
