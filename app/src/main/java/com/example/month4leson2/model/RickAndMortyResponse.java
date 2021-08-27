@@ -1,7 +1,5 @@
 package com.example.month4leson2.model;
 
-import android.media.Image;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public class RickAndMortyResponse<T> {
     }
 
     public ArrayList<T> getResults() {
-        return results;
+        return (ArrayList<T>) results;
     }
 
     public void setResults(ArrayList<T> results) {

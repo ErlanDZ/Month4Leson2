@@ -1,9 +1,13 @@
 package com.example.month4leson2.model;
 
-import com.google.gson.annotations.SerializedName;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+@Entity
 public class LocationModel {
 
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     private int id;
 

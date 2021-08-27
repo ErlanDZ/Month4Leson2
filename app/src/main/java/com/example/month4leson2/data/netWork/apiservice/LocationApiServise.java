@@ -1,4 +1,4 @@
-package com.example.month4leson2.data.netWork.interfaces;
+package com.example.month4leson2.data.netWork.apiservice;
 
 import com.example.month4leson2.model.LocationModel;
 import com.example.month4leson2.model.RickAndMortyResponse;

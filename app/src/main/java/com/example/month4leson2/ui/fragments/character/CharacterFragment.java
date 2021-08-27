@@ -1,6 +1,12 @@
 package com.example.month4leson2.ui.fragments.character;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,19 +15,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.month4leson2.R;
-import com.example.month4leson2.ui.adapters.CharacterAdapter;
 import com.example.month4leson2.databinding.FragmentCharacterBinding;
+import com.example.month4leson2.model.Character;
+import com.example.month4leson2.ui.adapters.CharacterAdapter;
+
+import java.util.ArrayList;
 
 
 public class CharacterFragment extends Fragment {
     private FragmentCharacterBinding binding;
     private CharacterAdapter adapter = new CharacterAdapter();
-    private  CharacterViewModel viewModel;
+    private CharacterViewModel viewModel;
 
     @Nullable
     @Override
@@ -38,9 +43,23 @@ public class CharacterFragment extends Fragment {
     }
 
     private void setUpRequest() {
-        viewModel.techCharacters().observe(getViewLifecycleOwner(), characters -> {
-            adapter.addList(characters.getResults());
-        });
+        if (isNetworkAvailable()) {
+            viewModel.techCharacters().observe(getViewLifecycleOwner(), characters -> {
+                if (characters != null) {
+                    adapter.addList(characters.getResults());
+                }
+            });
+        } else {
+            adapter.addList((ArrayList<Character>) viewModel.getCharacters());
+        }
+
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private void initialize() {
@@ -51,7 +70,6 @@ public class CharacterFragment extends Fragment {
     private void setUpRecycler() {
         binding.recyclerCharacter.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerCharacter.setAdapter(adapter);
-
         adapter.setOnItemClickListener(position -> {
             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                     .navigate(CharacterFragmentDirections.actionCharacterFragmentToCharacterDetailFragment(position)

@@ -1,5 +1,8 @@
 package com.example.month4leson2.ui.fragments.location;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,9 +19,12 @@ import android.view.ViewGroup;
 
 import com.example.month4leson2.R;
 import com.example.month4leson2.databinding.FragmentLocationsBinding;
+import com.example.month4leson2.model.Character;
 import com.example.month4leson2.model.LocationModel;
 import com.example.month4leson2.model.RickAndMortyResponse;
 import com.example.month4leson2.ui.adapters.LocationAdapter;
+
+import java.util.ArrayList;
 
 public class LocationsFragment extends Fragment {
 
@@ -43,9 +49,24 @@ public class LocationsFragment extends Fragment {
     }
 
     private void setUpRequest() {
-        vIewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> {
-            adapter.addList(locationModel.getResults());
-        });
+        if (isNetworkAvailable()){
+            vIewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> {
+                if (locationModel != null) {
+                    adapter.addList(locationModel.getResults());
+                }
+            });
+        }
+        else {
+            adapter.addList((ArrayList<LocationModel>) vIewModel.getLocation());
+        }
+
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private void initialize() {

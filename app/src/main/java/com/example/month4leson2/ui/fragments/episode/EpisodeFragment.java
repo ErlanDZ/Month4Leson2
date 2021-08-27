@@ -1,5 +1,8 @@
 package com.example.month4leson2.ui.fragments.episode;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +24,8 @@ import com.example.month4leson2.model.EpisodeModel;
 import com.example.month4leson2.model.RickAndMortyResponse;
 import com.example.month4leson2.ui.adapters.EpisodeAdapter;
 import com.example.month4leson2.ui.fragments.character.CharacterFragmentDirections;
+
+import java.util.ArrayList;
 
 
 public class EpisodeFragment extends Fragment {
@@ -44,12 +49,23 @@ public class EpisodeFragment extends Fragment {
     }
 
     private void setUpRequest() {
-        viewModel.fetchEpisode().observe(getViewLifecycleOwner(), new Observer<RickAndMortyResponse<EpisodeModel>>() {
-            @Override
-            public void onChanged(RickAndMortyResponse<EpisodeModel> episodeModelRickAndMortyResponse) {
-                adapter.addList(episodeModelRickAndMortyResponse.getResults());
-            }
-        });
+        if (isNetworkAvailable()) {
+            viewModel.fetchEpisode().observe(getViewLifecycleOwner(), episodeModelRickAndMortyResponse ->{
+               if (episodeModelRickAndMortyResponse != null){
+                   adapter.addList(episodeModelRickAndMortyResponse.getResults());
+               }
+            });
+        }
+        else {
+            adapter.addList((ArrayList<EpisodeModel>) viewModel.getEpisode());
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private void initialize() {

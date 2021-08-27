@@ -1,10 +1,8 @@
 package com.example.month4leson2.data.netWork;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.month4leson2.data.netWork.interfaces.CharecterApiServise;
-import com.example.month4leson2.data.netWork.interfaces.EpisodeApiServices;
-import com.example.month4leson2.data.netWork.interfaces.LocationApiServise;
+import com.example.month4leson2.data.netWork.apiservice.CharecterApiServise;
+import com.example.month4leson2.data.netWork.apiservice.EpisodeApiServices;
+import com.example.month4leson2.data.netWork.apiservice.LocationApiServise;
 
 import java.util.concurrent.TimeUnit;
 

@@ -4,44 +4,32 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.month4leson2.App;
+import com.example.month4leson2.data.repositories.CharacterRepository;
+import com.example.month4leson2.data.repositories.EpisodeRepository;
+import com.example.month4leson2.data.repositories.LocationRepository;
+import com.example.month4leson2.model.Character;
 import com.example.month4leson2.model.EpisodeModel;
 import com.example.month4leson2.model.LocationModel;
 import com.example.month4leson2.model.RickAndMortyResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LocationVIewModel extends ViewModel {
-    public MutableLiveData<RickAndMortyResponse<LocationModel>> fetchLocations() {
-        MutableLiveData<RickAndMortyResponse<LocationModel>> data = new MutableLiveData<>();
-        App.locationApiServise.fetchLocation().enqueue(new Callback<RickAndMortyResponse<LocationModel>>() {
-            @Override
-            public void onResponse(Call<RickAndMortyResponse<LocationModel>> call, Response<RickAndMortyResponse<LocationModel>> response) {
-                data.postValue(response.body());
-            }
+    private final LocationRepository  locationRepository= new LocationRepository();
 
-            @Override
-            public void onFailure(Call<RickAndMortyResponse<LocationModel>> call, Throwable t) {
-                data.postValue(null);
-            }
-        });
-        return data;
+    public MutableLiveData<RickAndMortyResponse<LocationModel>> fetchLocations() {
+        return locationRepository.fetchLocations();
     }
 
-    public MutableLiveData<LocationModel> fetchLocation(int id) {
-        MutableLiveData<LocationModel> data = new MutableLiveData<>();
-        App.locationApiServise.fetchLocationCALL(id).enqueue(new Callback<LocationModel>() {
-            @Override
-            public void onResponse(Call<LocationModel> call, Response<LocationModel> response) {
-                data.setValue(response.body());
-            }
+    public   MutableLiveData<LocationModel> fetchLocation(int id) {
+        return locationRepository.fetchLocation(id);
+    }
 
-            @Override
-            public void onFailure(Call<LocationModel> call, Throwable t) {
-                data.setValue(null);
-            }
-        });
-        return data;
+    List<LocationModel> getLocation() {
+        return locationRepository.getLocation();
     }
 }
