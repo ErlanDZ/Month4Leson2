@@ -1,26 +1,18 @@
 package com.example.month4leson2.ui.fragments.location.detail;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.month4leson2.R;
-import com.example.month4leson2.databinding.FragmentEpisodeDetailBinding;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.month4leson2.base.BaseFragment;
 import com.example.month4leson2.databinding.FragmentLocatonDetailBinding;
-import com.example.month4leson2.model.LocationModel;
-import com.example.month4leson2.ui.fragments.episode.EpisodeViewModel;
 import com.example.month4leson2.ui.fragments.location.LocationVIewModel;
 
 
-public class LocatonDetailFragment extends Fragment {
+public class LocatonDetailFragment extends BaseFragment<LocationVIewModel, FragmentLocatonDetailBinding> {
 
     private FragmentLocatonDetailBinding binding;
     private LocationVIewModel vIewModel;
@@ -33,22 +25,19 @@ public class LocatonDetailFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initialization();
-        getDate();
+    protected void initialize() {
+        super.initialize();
+        vIewModel = new ViewModelProvider(requireActivity()).get(LocationVIewModel.class);
     }
 
-    private void getDate() {
+    @Override
+    protected void getDate() {
+        super.getDate();
         vIewModel.fetchLocation(LocatonDetailFragmentArgs.fromBundle(getArguments())
                 .getId()).observe(getViewLifecycleOwner(), locationModel -> {
-                    binding.txtNameLocationDetail.setText(locationModel.getName());
-                    binding.txtTypeLocationDetail.setText(locationModel.getType());
-                    binding.txtDimensionLocationDetail.setText(locationModel.getDimension());
-                });
-    }
-
-    private void initialization() {
-        vIewModel = new ViewModelProvider(requireActivity()).get(LocationVIewModel.class);
+            binding.txtNameLocationDetail.setText(locationModel.getName());
+            binding.txtTypeLocationDetail.setText(locationModel.getType());
+            binding.txtDimensionLocationDetail.setText(locationModel.getDimension());
+        });
     }
 }

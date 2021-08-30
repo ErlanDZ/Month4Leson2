@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.month4leson2.App;
+import com.example.month4leson2.base.BaseFragment;
+import com.example.month4leson2.base.BaseViewModel;
 import com.example.month4leson2.data.repositories.CharacterRepository;
 import com.example.month4leson2.data.repositories.EpisodeRepository;
 import com.example.month4leson2.model.Character;
@@ -16,11 +18,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EpisodeViewModel extends ViewModel {
+public class EpisodeViewModel extends BaseViewModel {
+
+    public int page = 1;
     private final EpisodeRepository episodeRepository = new EpisodeRepository();
 
-    public MutableLiveData<RickAndMortyResponse<EpisodeModel>> fetchEpisode() {
-        return episodeRepository.fetchEpisode();
+    public MutableLiveData<RickAndMortyResponse<EpisodeModel>> fetchEpisodes() {
+        return episodeRepository.fetchEpisodes(page);
     }
 
     public   MutableLiveData<EpisodeModel> fetchEpisode(int id) {

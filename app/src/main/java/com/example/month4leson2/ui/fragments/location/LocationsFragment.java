@@ -4,35 +4,32 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.month4leson2.R;
+import com.example.month4leson2.base.BaseFragment;
 import com.example.month4leson2.databinding.FragmentLocationsBinding;
-import com.example.month4leson2.model.Character;
 import com.example.month4leson2.model.LocationModel;
-import com.example.month4leson2.model.RickAndMortyResponse;
 import com.example.month4leson2.ui.adapters.LocationAdapter;
 
 import java.util.ArrayList;
 
-public class LocationsFragment extends Fragment {
+public class LocationsFragment extends BaseFragment<LocationVIewModel, FragmentLocationsBinding> {
 
-    private FragmentLocationsBinding  binding;
-    private LocationVIewModel vIewModel;
+    private FragmentLocationsBinding binding;
     private LocationAdapter adapter = new LocationAdapter();
-
-
+    private LinearLayoutManager linearLayoutManager;
+    private int visibleItemCount;
+    private int totalItemCount;
+    private int pastVisiblesItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,24 +39,39 @@ public class LocationsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initialize();
-        setUpRequest();
+    protected void initialize() {
+        viewModel = new ViewModelProvider(requireActivity()).get(LocationVIewModel.class);
     }
 
-    private void setUpRequest() {
-        if (isNetworkAvailable()){
-            vIewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> {
+    public void setUpRequest() {
+        if (isNetworkAvailable()) {
+            viewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> {
                 if (locationModel != null) {
                     adapter.addList(locationModel.getResults());
                 }
             });
+        } else {
+            adapter.addList((ArrayList<LocationModel>) viewModel.getLocation());
         }
-        else {
-            adapter.addList((ArrayList<LocationModel>) vIewModel.getLocation());
-        }
+        binding.recyclerLocation.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
+                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                        viewModel.page++;
+                        viewModel.fetchLocations().observe(getViewLifecycleOwner(), location -> {
+                            if (location != null)
+                                adapter.addList(location.getResults());
+                        });
+                    }
+                }
 
+            }
+        });
     }
 
     private boolean isNetworkAvailable() {
@@ -69,13 +81,11 @@ public class LocationsFragment extends Fragment {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void initialize() {
-        vIewModel = new ViewModelProvider(requireActivity()).get(LocationVIewModel.class);
-        setUpRecycler();
-    }
-
-    private void setUpRecycler() {
-        binding.recyclerLocation.setLayoutManager(new LinearLayoutManager(getContext()));
+    @Override
+    protected void setUpRecycler() {
+        super.setUpRecycler();
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        binding.recyclerLocation.setLayoutManager(linearLayoutManager);
         binding.recyclerLocation.setAdapter(adapter);
 
         adapter.setOnItemClickLocation(position -> {

@@ -10,15 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.month4leson2.base.BaseFragment;
 import com.example.month4leson2.databinding.FragmentCharacterDetailBinding;
 import com.example.month4leson2.ui.fragments.character.CharacterViewModel;
 import com.example.month4leson2.model.Character;
 import com.example.month4leson2.model.RickAndMortyResponse;
 
-public class CharacterDetailFragment extends Fragment {
+public class CharacterDetailFragment extends BaseFragment<CharacterViewModel, FragmentCharacterDetailBinding> {
     private FragmentCharacterDetailBinding binding;
     private CharacterViewModel viewModel;
 
@@ -30,17 +32,14 @@ public class CharacterDetailFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initialization();
-        getDate();
-    }
-
-    private void initialization() {
+    protected void initialize() {
+        super.initialize();
         viewModel = new ViewModelProvider(requireActivity()).get(CharacterViewModel.class);
     }
 
-    private void getDate() {
+    @Override
+    protected void getDate() {
+        super.getDate();
         viewModel.fetchCharacter(CharacterDetailFragmentArgs.fromBundle(getArguments())
                 .getGetId()).observe(getViewLifecycleOwner(), character -> {
             binding.txtNameCharacterDetail.setText(character.getName());

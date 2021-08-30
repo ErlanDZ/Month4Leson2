@@ -4,35 +4,34 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.month4leson2.R;
+import com.example.month4leson2.base.BaseFragment;
 import com.example.month4leson2.databinding.FragmentEpisodeBinding;
 import com.example.month4leson2.model.EpisodeModel;
 import com.example.month4leson2.model.RickAndMortyResponse;
 import com.example.month4leson2.ui.adapters.EpisodeAdapter;
-import com.example.month4leson2.ui.fragments.character.CharacterFragmentDirections;
 
 import java.util.ArrayList;
 
 
-public class EpisodeFragment extends Fragment {
+public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpisodeBinding> {
 
     private FragmentEpisodeBinding binding;
     private EpisodeViewModel viewModel;
     private EpisodeAdapter adapter = new EpisodeAdapter();
+    private LinearLayoutManager linearLayoutManager;
 
     @Nullable
     @Override
@@ -42,23 +41,45 @@ public class EpisodeFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initialize();
-        setUpRequest();
+    protected void initialize() {
+        super.initialize();
+        viewModel = new ViewModelProvider(requireActivity()).get(EpisodeViewModel.class);
+        setUpRecycler();
     }
 
-    private void setUpRequest() {
+    private int visibleItemCount;
+    private  int totalItemCount;
+    private int pastVisiblesItems;
+
+    public void setUpRequest() {
         if (isNetworkAvailable()) {
-            viewModel.fetchEpisode().observe(getViewLifecycleOwner(), episodeModelRickAndMortyResponse ->{
-               if (episodeModelRickAndMortyResponse != null){
-                   adapter.addList(episodeModelRickAndMortyResponse.getResults());
-               }
+            viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeModelRickAndMortyResponse -> {
+                if (episodeModelRickAndMortyResponse != null) {
+                    adapter.addList(episodeModelRickAndMortyResponse.getResults());
+                }
             });
-        }
-        else {
+        } else {
             adapter.addList((ArrayList<EpisodeModel>) viewModel.getEpisode());
         }
+
+        binding.recyclerEpisode.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy >0){
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
+                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount){
+                        viewModel.page++;
+                        viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episode -> {
+                            adapter.addList(episode.getResults());
+                        });
+                    }
+                }
+
+            }
+        });
     }
 
     private boolean isNetworkAvailable() {
@@ -68,13 +89,11 @@ public class EpisodeFragment extends Fragment {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void initialize() {
-        viewModel = new ViewModelProvider(requireActivity()).get(EpisodeViewModel.class);
-        setUpRecycler();
-    }
-
-    private void setUpRecycler() {
-        binding.recyclerEpisode.setLayoutManager(new LinearLayoutManager(getContext()));
+    @Override
+    protected void setUpRecycler() {
+        super.setUpRecycler();
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        binding.recyclerEpisode.setLayoutManager(linearLayoutManager);
         binding.recyclerEpisode.setAdapter(adapter);
 
         adapter.setOnItemClickEpisode(position -> {
