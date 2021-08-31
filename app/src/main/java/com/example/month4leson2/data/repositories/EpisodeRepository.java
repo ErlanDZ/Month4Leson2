@@ -31,7 +31,8 @@ public class EpisodeRepository {
         });
         return data;
     }
-    public MutableLiveData<EpisodeModel> fetchEpisode(int id){
+
+    public MutableLiveData<EpisodeModel> fetchEpisode(int id) {
         MutableLiveData<EpisodeModel> data = new MutableLiveData<>();
         App.episodeApiServices.fetchEpisode(id).enqueue(new Callback<EpisodeModel>() {
             @Override
@@ -44,9 +45,10 @@ public class EpisodeRepository {
                 data.setValue(null);
             }
         });
-        return  data;
+        return data;
     }
-    public List<EpisodeModel> getEpisode(){
+
+    public List<EpisodeModel> getEpisode() {
         return App.episodeDao.getAll();
     }
 }

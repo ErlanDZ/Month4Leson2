@@ -55,11 +55,11 @@ public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpis
         if (isNetworkAvailable()) {
             viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeModelRickAndMortyResponse -> {
                 if (episodeModelRickAndMortyResponse != null) {
-                    adapter.addList(episodeModelRickAndMortyResponse.getResults());
+                    adapter.submitList(episodeModelRickAndMortyResponse.getResults());
                 }
             });
         } else {
-            adapter.addList((ArrayList<EpisodeModel>) viewModel.getEpisode());
+            adapter.submitList((ArrayList<EpisodeModel>) viewModel.getEpisode());
         }
 
         binding.recyclerEpisode.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -73,7 +73,7 @@ public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpis
                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount){
                         viewModel.page++;
                         viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episode -> {
-                            adapter.addList(episode.getResults());
+                            adapter.submitList(episode.getResults());
                         });
                     }
                 }

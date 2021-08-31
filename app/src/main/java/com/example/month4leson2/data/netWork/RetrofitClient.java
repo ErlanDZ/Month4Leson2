@@ -19,26 +19,25 @@ public class RetrofitClient {
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .build();
-
-    private HttpLoggingInterceptor pravideLoginInterceptor() {
-        return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
-    }
-
     private Retrofit provideRetrofit = new Retrofit.Builder()
             .baseUrl("https://rickandmortyapi.com/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public CharecterApiServise charecterApiServise (){
+    private HttpLoggingInterceptor pravideLoginInterceptor() {
+        return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+    }
+
+    public CharecterApiServise charecterApiServise() {
         return provideRetrofit.create(CharecterApiServise.class);
     }
 
-    public EpisodeApiServices  episodeApiServices(){
+    public EpisodeApiServices episodeApiServices() {
         return provideRetrofit.create(EpisodeApiServices.class);
     }
 
-    public LocationApiServise locationApiServise(){
+    public LocationApiServise locationApiServise() {
         return provideRetrofit.create(LocationApiServise.class);
     }
 }

@@ -1,45 +1,56 @@
 package com.example.month4leson2.ui.adapters;
 
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.month4leson2.data.netWork.onItemClick.OnItemClick;
 import com.example.month4leson2.databinding.ItemCharacterBinding;
-import com.example.month4leson2.ui.fragments.character.OnItemClickCharacter;
 import com.example.month4leson2.model.Character;
 
-import java.util.ArrayList;
+public class CharacterAdapter extends ListAdapter<Character, CharacterAdapter.CharacterViewholder> {
 
-public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.CharacterViewholder> {
 
-    private ArrayList<Character> list = new ArrayList<>();
-    public OnItemClickCharacter onItemClickCharacter;
+    public OnItemClick onItemClickCharacter;
 
+    public CharacterAdapter() {
+        super(new CharacterDiffUtil());
+    }
 
     @NonNull
     @Override
-    public CharacterViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CharacterViewholder(ItemCharacterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+    public CharacterAdapter.CharacterViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new CharacterAdapter.CharacterViewholder(ItemCharacterBinding.inflate(LayoutInflater.from(parent.getContext()),
+                parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CharacterViewholder holder, int position) {
-        holder.onBind(list.get(position));
+    public void onBindViewHolder(@NonNull CharacterAdapter.CharacterViewholder holder, int position) {
+        holder.onBind(getItem(position));
     }
 
-    @Override
-    public int getItemCount() {
-        return list.size();
+    public void setOnItemClickListener(OnItemClick listener) {
+        this.onItemClickCharacter = listener;
     }
 
-    public void addList(ArrayList<Character> list) {
-        this.list = list;
-        notifyDataSetChanged();
+    public static class CharacterDiffUtil extends DiffUtil.ItemCallback<Character> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull Character oldItem, @NonNull Character newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(@NonNull Character oldItem, @NonNull Character newItem) {
+            return oldItem == newItem;
+        }
     }
 
     class CharacterViewholder extends RecyclerView.ViewHolder {
@@ -59,12 +70,9 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
                     .into(binding.imageCharacter);
 
             binding.getRoot().setOnClickListener(v -> {
-                onItemClickCharacter.onItemClickCher(item.getId());
+                onItemClickCharacter.onClickItemListener(item.getId());
             });
         }
     }
-
-    public void setOnItemClickListener(OnItemClickCharacter listener) {
-        this.onItemClickCharacter = listener;
-    }
 }
+

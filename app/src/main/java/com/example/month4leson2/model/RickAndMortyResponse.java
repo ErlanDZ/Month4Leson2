@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public class RickAndMortyResponse<T> {
 
-@SerializedName("info")
+    @SerializedName("info")
     private Info info;
 
-@SerializedName("results")
-    private ArrayList <T> results;
+    @SerializedName("results")
+    private ArrayList<T> results;
 
     public Info getInfo() {
         return info;

@@ -26,7 +26,6 @@ import com.example.month4leson2.ui.adapters.CharacterAdapter;
 
 import java.util.ArrayList;
 
-
 public class CharacterFragment extends BaseFragment<CharacterViewModel, FragmentCharacterBinding> {
     private FragmentCharacterBinding binding;
     private CharacterAdapter adapter = new CharacterAdapter();
@@ -55,11 +54,11 @@ public class CharacterFragment extends BaseFragment<CharacterViewModel, Fragment
         if (isNetworkAvailable()) {
             viewModel.techCharacters().observe(getViewLifecycleOwner(), characters -> {
                 if (characters != null) {
-                    adapter.addList(characters.getResults());
+                    adapter.submitList(characters.getResults());
                 }
             });
         } else {
-            adapter.addList((ArrayList<Character>) viewModel.getCharacters());
+            adapter.submitList(viewModel.getCharacters());
         }
 
         binding.recyclerCharacter.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -73,7 +72,7 @@ public class CharacterFragment extends BaseFragment<CharacterViewModel, Fragment
                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount){
                         viewModel.page++;
                         viewModel.techCharacters().observe(getViewLifecycleOwner(), character -> {
-                            adapter.addList(character.getResults());
+                            adapter.submitList(character.getResults());
                         });
                     }
                 }

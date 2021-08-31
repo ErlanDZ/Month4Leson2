@@ -47,11 +47,11 @@ public class LocationsFragment extends BaseFragment<LocationVIewModel, FragmentL
         if (isNetworkAvailable()) {
             viewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> {
                 if (locationModel != null) {
-                    adapter.addList(locationModel.getResults());
+                    adapter.submitList(locationModel.getResults());
                 }
             });
         } else {
-            adapter.addList((ArrayList<LocationModel>) viewModel.getLocation());
+            adapter.submitList((ArrayList<LocationModel>) viewModel.getLocation());
         }
         binding.recyclerLocation.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -65,7 +65,7 @@ public class LocationsFragment extends BaseFragment<LocationVIewModel, FragmentL
                         viewModel.page++;
                         viewModel.fetchLocations().observe(getViewLifecycleOwner(), location -> {
                             if (location != null)
-                                adapter.addList(location.getResults());
+                                adapter.submitList(location.getResults());
                         });
                     }
                 }

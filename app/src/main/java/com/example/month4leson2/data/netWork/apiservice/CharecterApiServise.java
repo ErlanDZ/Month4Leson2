@@ -10,10 +10,10 @@ import retrofit2.http.Query;
 
 public interface CharecterApiServise {
     @GET("api/character")
-    Call <RickAndMortyResponse<Character>> fetchCharacters (@Query("page") int page);
+    Call<RickAndMortyResponse<Character>> fetchCharacters(@Query("page") int page);
 
     @GET("api/character/{id}")
-    Call <Character> fetchCharacter(
+    Call<Character> fetchCharacter(
             @Path("id") int id
     );
 }

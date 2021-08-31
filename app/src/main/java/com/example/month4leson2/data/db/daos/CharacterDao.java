@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface CharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(ArrayList<Character> character );
+    void insertAll(ArrayList<Character> character);
 
     @Query("SELECT * FROM character")
     List<Character> getAll();

@@ -48,7 +48,7 @@ public class CharacterRepository {
         return data;
     }
 
-   public List<Character> getCharacters(){
+    public List<Character> getCharacters() {
         return App.characterDao.getAll();
     }
 

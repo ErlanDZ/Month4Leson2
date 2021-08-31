@@ -47,7 +47,8 @@ public class LocationRepository {
         });
         return data;
     }
-    public List<LocationModel> getLocation(){
+
+    public List<LocationModel> getLocation() {
         return App.locationDao.getAll();
     }
 }

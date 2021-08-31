@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewbinding.ViewBinding;
 
-public abstract  class BaseFragment<ViewModel extends BaseViewModel, Binding extends ViewBinding> extends Fragment {
+public abstract class BaseFragment<ViewModel extends BaseViewModel, Binding extends ViewBinding> extends Fragment {
 
     protected ViewModel viewModel;
     protected Binding binding;
@@ -22,16 +22,16 @@ public abstract  class BaseFragment<ViewModel extends BaseViewModel, Binding ext
         getDate();
     }
 
-    protected  void getDate(){
+    protected void getDate() {
 
     }
 
-    protected  void setUpRecycler(){
+    protected void setUpRecycler() {
     }
 
-    protected  void setUpRequest(){
+    protected void setUpRequest() {
     }
 
-    protected  void initialize(){
+    protected void initialize() {
     }
 }
